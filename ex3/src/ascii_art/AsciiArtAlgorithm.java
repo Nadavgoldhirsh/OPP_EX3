@@ -34,7 +34,9 @@ public class AsciiArtAlgorithm {
             for (int j = 0; j < res; j++) {
                 Image image1 = subImages[i][j];
                 double brightness = greyImage(image1);
+//                System.out.println(brightness);
                 char char1 = matcher.getCharByImageBrightness(brightness);
+//                System.out.println(char1);
                 art[i][j] = char1;
             }
         }

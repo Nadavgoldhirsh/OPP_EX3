@@ -47,11 +47,13 @@ public class SubImgCharMatcher {
                 bestChars.add(key); //found a key that has the same distance so add it to the list
             }
             else if( Math.abs(value-brightness)<bestDistance) { // need to replace the list with the new key
+                bestDistance = Math.abs(value-brightness);
                 int size = bestChars.size();
                 for (int i = 0; i < size; i++) {
                     bestChars.remove(0);
                 }
                 bestChars.add(key);
+
             }
         }
         // now we have a new list that contains all keys with the best distances
