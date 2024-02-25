@@ -67,7 +67,7 @@ public class SubImgCharMatcher {
         char retChar = 0;
         int bestAsciiVal = CHARS_AMOUNT; // will be replaced because chars are in range 0-256
         for (char curChar : bestChars) {
-            if (bestAsciiVal < curChar) {
+            if (bestAsciiVal > curChar) {
                 bestAsciiVal = curChar;
                 retChar = curChar;
             }
