@@ -1,21 +1,27 @@
 package image_char_matching;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class holds a Map of the chars to build the Ascii art from.
  * it holds them in a Map where the keys are the chars and the values are their brightness levels.
  */
 public class SubImgCharMatcher {
+    /**
+     * This is the amount of chars
+     */
     private static final int CHARS_AMOUNT = 256;
     /**
      * This is the Map that holds the chars and their brightness
      */
     private final HashMap<Character, Double> charMap = new HashMap<>();
+    /**
+     * starting brightness
+     */
     private final static double INIT_BRIGHT = -1;
+    /**
+     * arr size
+     */
     private final static int BOOL_ARR_SIZE = 16;
 
 
@@ -23,7 +29,7 @@ public class SubImgCharMatcher {
      * Ctor of the class that gets a set of chars to use
      * @param charset a set of chars to use in order to create the new image
      */
-    public SubImgCharMatcher(char[] charset){
+    public SubImgCharMatcher(Set<Character> charset){
         for (char ch : charset){
             charMap.put(ch, INIT_BRIGHT) ;
         }

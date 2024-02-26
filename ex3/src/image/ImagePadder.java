@@ -34,15 +34,6 @@ public class ImagePadder {
         int widthPad =  (newArrayWidth- image.getWidth())/2;
         for (int i = 0; i < newArrayHeight; i++) {
             for (int j = 0; j < newArrayWidth; j++) {
-//                if ((i <= heightPad || i >= heightPad + image.getHeight()) &&
-//                        (j <= widthPad ||  j >= widthPad + image.getWidth())){
-//                    pixelArray[i][j] = Color.WHITE;
-//                }
-//                else{
-//                    pixelArray[i][j] = Color.BLACK;
-//                    //pixelArray[i][j] = image.getPixel(i-heightPad,j-widthPad);
-//                }
-
                 if (((heightPad < i) && (i < heightPad + image.getHeight())) &&
                         ((widthPad < j) && (j < widthPad + image.getWidth()))){
                     Color color = image.getPixel(i-heightPad,j-widthPad);

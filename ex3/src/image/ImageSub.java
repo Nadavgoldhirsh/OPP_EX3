@@ -24,7 +24,7 @@ public class ImageSub {
                 for (int a = 0; a < subImageDim; a++) {
                     for (int b = 0; b < subImageDim; b++) {
                         pixelArray[a][b] = image.getPixel
-                                (a + subImageDim * j, b + subImageDim * i);
+                                (a + subImageDim * i, b + subImageDim * j);
                     }
                 }
                 Image sub = new Image(pixelArray, subImageDim, subImageDim);

@@ -5,6 +5,9 @@ import static image.ImageGrey.greyImage;
 import static image.ImagePadder.padImage;
 import static image.ImageSub.subImage;
 import image_char_matching.*;
+
+import java.util.Set;
+
 /**
  * This class has a method that run the program
  */
@@ -12,12 +15,12 @@ public class AsciiArtAlgorithm {
 
     private image.Image image;
     private int res;
-    private char[] charset;
+    private Set<Character> charset;
 
     /**
      * class Ctor
      */
-    public AsciiArtAlgorithm(image.Image image, int res, char[] charset) {
+    public AsciiArtAlgorithm(image.Image image, int res, Set<Character> charset) {
         this.image = image;
         this.res = res;
         this.charset = charset;
@@ -34,9 +37,7 @@ public class AsciiArtAlgorithm {
             for (int j = 0; j < res; j++) {
                 Image image1 = subImages[i][j];
                 double brightness = greyImage(image1);
-//                System.out.println(brightness);
                 char char1 = matcher.getCharByImageBrightness(brightness);
-//                System.out.println(char1);
                 art[i][j] = char1;
             }
         }
