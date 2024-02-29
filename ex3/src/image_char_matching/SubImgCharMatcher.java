@@ -72,19 +72,17 @@ public class SubImgCharMatcher {
 
     /**
      * This method returns the minimal Ascii value of the chars in the given list
-     * @param bestChars a LinkedList of chars
+     * @param bestChars a LinkedList of chars that isn't empty
      * @return the char that have minimal Ascii value
      */
     private static char getMinAsciiValCharFromList(LinkedList<Character> bestChars) {
-        char retChar = 0;
-        int bestAsciiVal = CHARS_AMOUNT; // will be replaced because chars are in range 0-256
-        for (char curChar : bestChars) {
-            if (bestAsciiVal > curChar) {
-                bestAsciiVal = curChar;
-                retChar = curChar;
+        char minChar = bestChars.getFirst(); // Initialize with the first character
+        for (char ch : bestChars) {
+            if (ch < minChar) {
+                minChar = ch; // Update minChar if the current character has a lower ASCII value
             }
         }
-        return retChar;
+        return minChar;
     }
 
     /**

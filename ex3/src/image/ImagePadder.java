@@ -42,8 +42,6 @@ public class ImagePadder {
                 else{
                     pixelArray[i][j] = Color.WHITE;
                 }
-
-
             }
         }
         Image i = new Image(pixelArray,newArrayWidth,newArrayHeight);
