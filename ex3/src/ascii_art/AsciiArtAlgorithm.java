@@ -29,6 +29,7 @@ public class AsciiArtAlgorithm {
      * This method run the program
      */
     public char [][] run(){
+        //TODO: create logic so the func will not calc unnecessary calculations
         SubImgCharMatcher matcher = new SubImgCharMatcher(charset);
         this.image = padImage(this.image);
         Image[][] subImages = subImage(this.res, this.image);

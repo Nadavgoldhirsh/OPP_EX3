@@ -11,14 +11,19 @@ public class SubImgCharMatcher {
      * This is the amount of chars
      */
     private static final int CHARS_AMOUNT = 256;
+
     /**
      * This is the Map that holds the chars and their brightness
      */
-    private final HashMap<Character, Double> charMap = new HashMap<>();
+    private HashMap<Character, Double> charMap = new HashMap<>();
+
     /**
-     * starting brightness
+     * This is the Map that holds the chars and their normal brightness
      */
-    private final static double INIT_BRIGHT = -1;
+    private HashMap<Character, Double> charMapNormal = new HashMap<>();
+
+
+
     /**
      * arr size
      */
@@ -31,9 +36,9 @@ public class SubImgCharMatcher {
      */
     public SubImgCharMatcher(Set<Character> charset){
         for (char ch : charset){
-            charMap.put(ch, INIT_BRIGHT) ;
+            charMap.put(ch, getCharBrightness(ch));
         }
-        calcCharSetBrightness();
+        calcNormCharSetBrightness(); // calc the norm of the vals
     }
 
     /**
@@ -46,7 +51,7 @@ public class SubImgCharMatcher {
     public char getCharByImageBrightness(double brightness){
         LinkedList<Character> bestChars = new LinkedList<>();
         double bestDistance = 1;  // will be replaced because vals in range 0-1
-        for (Map.Entry<Character, Double> entry : charMap.entrySet()) {
+        for (Map.Entry<Character, Double> entry : charMapNormal.entrySet()) {
             char key = entry.getKey();
             double value = entry.getValue();
             if (Math.abs(value-brightness)==bestDistance){
@@ -59,7 +64,6 @@ public class SubImgCharMatcher {
                     bestChars.remove(0);
                 }
                 bestChars.add(key);
-
             }
         }
         // now we have a new list that contains all keys with the best distances
@@ -87,22 +91,15 @@ public class SubImgCharMatcher {
      * This method calculates the brightness for every single char in the current set
      * acc to the ex requirements
      */
-    private void calcCharSetBrightness() {
+    private void calcNormCharSetBrightness() {
+        // now we assume all data is updated and we norm all the vals in the map
+        double minBright = getMinBrightness(charMap);
+        double maxBright = getMaxBrightness(charMap);
         for (Map.Entry<Character, Double> entry : charMap.entrySet()) {
             char key = entry.getKey();
             double value = entry.getValue();
-            if(value == INIT_BRIGHT){
-                charMap.put(key, getCharBrightness(key));
-            }
-
-        }  // now we assume all data is updated and we norm all the vals in the map
-        for (Map.Entry<Character, Double> entry : charMap.entrySet()) {
-            char key = entry.getKey();
-            double value = entry.getValue();
-            double minBright = getMinBrightness();
-            double maxBright = getMaxBrightness();
             value = (value-minBright)/(maxBright-minBright); // calc the new norm
-            charMap.put(key,value);
+            charMapNormal.put(key,value);
         }
     }
 
@@ -110,29 +107,27 @@ public class SubImgCharMatcher {
      * This func return the min brightness in the Map
      * @return the minimum value in the map assuming the vals range is 0-1
      */
-    private double getMinBrightness() {
-        double min = 1; //will be replaced because the range of vals are 0-1.
-        for (Map.Entry<Character, Double> entry : charMap.entrySet()) {
-            double value = entry.getValue();
-            if (value<min) {
-                min = value;
+    private double getMinBrightness(HashMap<Character, Double> cmap) {
+        double minBrightness = Double.MAX_VALUE;
+        for (double brightness : cmap.values()) {
+            if (brightness < minBrightness) {
+                minBrightness = brightness;
             }
         }
-        return min;
+        return minBrightness;
     }
     /**
      * This func return the max brightness in the Map
      * @return the Max value in the map assuming the vals range is 0-1
      */
-    private double getMaxBrightness() {
-        double max = -1; //will be replaced because the range of vals are 0-1.
-        for (Map.Entry<Character, Double> entry : charMap.entrySet()) {
-            double value = entry.getValue();
-            if (value>max) {
-                max = value;
+    private double getMaxBrightness(HashMap<Character, Double> cmap) {
+        double maxBrightness = Double.MIN_VALUE;
+        for (double brightness : cmap.values()) {
+            if (brightness > maxBrightness) {
+                maxBrightness = brightness;
             }
         }
-        return max;
+        return maxBrightness;
     }
 
 
@@ -159,9 +154,27 @@ public class SubImgCharMatcher {
      * @param c a char to add to the set
      */
     public void addChar(char c){
-
-        charMap.put(c, (double) -1);
-        calcCharSetBrightness();
+        double brightness;
+        if (!charMap.containsKey(c)) {
+            brightness = getCharBrightness(c);
+            charMap.put(c, brightness);
+        }
+        else {
+            // the char is already inside
+            return;
+        }
+        // now add to the normMap and check if we need to change all or just add new norm
+        if (getMaxBrightness(charMap)==brightness || getMinBrightness(charMap) == brightness){
+            // means there is a new min/max value so update the whole set
+            charMapNormal.put(c,brightness);
+            calcNormCharSetBrightness();
+        }
+        else{
+            double minBright = getMinBrightness(charMap);
+            double maxBright = getMaxBrightness(charMap);
+            double value = (charMap.get(c)-minBright)/(maxBright-minBright); // calc the new norm
+            charMapNormal.put(c,value);
+        }
 
     }
 
@@ -170,8 +183,19 @@ public class SubImgCharMatcher {
      * @param c a char to remove from the set
      */
     public void removeChar(char c){
-        charMap.remove(c);
-        calcCharSetBrightness();
-
-    }
+        double brightness;
+        if (charMap.containsKey(c)) {
+            brightness = charMap.get(c);
+            if (brightness == getMinBrightness(charMap)|| brightness == getMaxBrightness(charMap)){
+                charMapNormal.remove(c);
+                charMap.remove(c);
+                calcNormCharSetBrightness();
+            }
+            else{
+                charMap.remove(c);
+                charMapNormal.remove(c);
+            }
+            }
+        // else we have nothing to remove so return
+        }
 }
