@@ -16,6 +16,11 @@ public class Image {
     private final int width;
     private final int height;
 
+    /**
+     * class ctor
+     * @param filename the given name
+     * @throws IOException throws if invalid path
+     */
     public Image(String filename) throws IOException {
         BufferedImage im = ImageIO.read(new File(filename));
         width = im.getWidth();
@@ -30,25 +35,55 @@ public class Image {
         }
     }
 
+    /**
+     * another Ctor
+     * @param pixelArray  - a given array of pixels
+     * @param width - the amount of rows
+     * @param height - the amount of cols
+     */
     public Image(Color[][] pixelArray, int width, int height) {
         this.pixelArray = pixelArray;
         this.width = width;
         this.height = height;
     }
 
+
+    /**
+     * Gets the width of the image.
+     *
+     * @return The width of the image.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Gets the height of the image.
+     *
+     * @return The height of the image.
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Gets the color of the pixel at the specified coordinates.
+     *
+     * @param x The x-coordinate of the pixel.
+     * @param y The y-coordinate of the pixel.
+     * @return The color of the pixel at the specified coordinates.
+     */
     public Color getPixel(int x, int y) {
         return pixelArray[x][y];
     }
 
-    public void saveImage(String fileName){
+    /**
+     * Saves the image to a file in JPEG format.
+     *
+     * @param fileName The name of the file to save the image to.
+     * @throws RuntimeException If an IOException occurs during the saving process.
+     */
+    public void saveImage(String fileName) {
         // Initialize BufferedImage, assuming Color[][] is already properly populated.
         BufferedImage bufferedImage = new BufferedImage(pixelArray[0].length, pixelArray.length,
                 BufferedImage.TYPE_INT_RGB);
@@ -58,12 +93,11 @@ public class Image {
                 bufferedImage.setRGB(y, x, pixelArray[x][y].getRGB());
             }
         }
-        File outputfile = new File(fileName+".jpeg");
+        File outputfile = new File(fileName + ".jpeg");
         try {
             ImageIO.write(bufferedImage, "jpeg", outputfile);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

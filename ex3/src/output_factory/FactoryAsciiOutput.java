@@ -7,7 +7,7 @@ import ascii_output.HtmlAsciiOutput;
 
 public class FactoryAsciiOutput {
     public static final String DEFAULT_FILE_NAME = "out.html";
-    public static final String DEFAULT_FONT = "New Courier";
+    public static final String DEFAULT_FONT = "Courier New";
 
     /**
      * Class ctor

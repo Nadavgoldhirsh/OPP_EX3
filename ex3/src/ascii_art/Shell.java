@@ -60,7 +60,8 @@ public class Shell {
     /**
      * default cat image
      */
-    private static String IMAGE = "cat.jpeg";
+    private static final String IMAGE = "cat.jpeg";
+    private static final String OUTED_FOR_INPUT = ">>> ";
     /**
      * default resolution
      */
@@ -97,7 +98,7 @@ public class Shell {
 
     public void run() {
         while (true) {
-            System.out.println(">>>");
+            System.out.print(OUTED_FOR_INPUT);
             String input = KeyboardInput.readLine();
             String[] words = input.split("\\s+");
             SubImgCharMatcher matcher = new SubImgCharMatcher(charSet);
@@ -221,6 +222,7 @@ public class Shell {
             else{
                 resolution = resolution*2;
                 changedTheAlgoParams = true;
+                System.out.println("Resolution set to "+resolution);
             }
         } else if (words[1].equals(DOWN)) {
             int min_res = Math.max(1, image.getWidth()/ image.getHeight());
@@ -230,6 +232,7 @@ public class Shell {
             else{
                 resolution = resolution/2;
                 changedTheAlgoParams = true;
+                System.out.println("Resolution set to "+resolution);
             }
         }
         else{
