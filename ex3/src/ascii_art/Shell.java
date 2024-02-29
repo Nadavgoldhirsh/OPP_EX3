@@ -62,10 +62,11 @@ public class Shell {
      */
     private static final String IMAGE = "cat.jpeg";
     private static final String OUTED_FOR_INPUT = ">>> ";
+    private static final String RESOLUTION_SET_TO = "Resolution set to ";
     /**
      * default resolution
      */
-    private static int DEFAULT_RESOLUTION = 128;
+    private static final int DEFAULT_RESOLUTION = 128;
     /**
      * default charset
      */
@@ -76,10 +77,11 @@ public class Shell {
     private static final String EXIT = "exit";
     private static final String ADD = "add";
     private static final String REMOVE = "remove";
+    private static final String REGEX = "\\s+";
     private int resolution;
     private Image image;
     private String outputType;
-    private FactoryAsciiOutput factory;
+    private final FactoryAsciiOutput factory;
     private AsciiOutput asciiOuter;
     private AsciiArtAlgorithm ascii;
     private boolean changedTheAlgoParams;
@@ -100,7 +102,7 @@ public class Shell {
         while (true) {
             System.out.print(OUTED_FOR_INPUT);
             String input = KeyboardInput.readLine();
-            String[] words = input.split("\\s+");
+            String[] words = input.split(REGEX);
             SubImgCharMatcher matcher = new SubImgCharMatcher(charSet);
             try{
             if (input.equals(EXIT)) {
@@ -232,7 +234,7 @@ public class Shell {
             else{
                 resolution = resolution/2;
                 changedTheAlgoParams = true;
-                System.out.println("Resolution set to "+resolution);
+                System.out.println(RESOLUTION_SET_TO +resolution);
             }
         }
         else{

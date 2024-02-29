@@ -15,12 +15,12 @@ public class SubImgCharMatcher {
     /**
      * This is the Map that holds the chars and their brightness
      */
-    private HashMap<Character, Double> charMap = new HashMap<>();
+    private final HashMap<Character, Double> charMap = new HashMap<>();
 
     /**
      * This is the Map that holds the chars and their normal brightness
      */
-    private HashMap<Character, Double> charMapNormal = new HashMap<>();
+    private final HashMap<Character, Double> charMapNormal = new HashMap<>();
 
 
 

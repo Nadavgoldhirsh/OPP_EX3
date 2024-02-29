@@ -5,6 +5,12 @@ import java.awt.*;
  * This class has a method that gets image and make from it every pixel as grey
  */
 public class ImageGrey {
+
+    private static final double RED = 0.2126;
+    private static final double GREEN = 0.7152;
+    private static final double BLUE = 0.0722;
+    private static final int CHARSAMOUNT = 255;
+
     /**
      * class Ctor
      */
@@ -19,11 +25,11 @@ public class ImageGrey {
         for (int i = 0; i < image.getHeight(); i++) {
             for (int j = 0; j < image.getWidth(); j++) {
                 color = image.getPixel(i, j);
-                sumGreyPixel +=  color.getRed() * 0.2126 +
-                        color.getGreen() * 0.7152 + color.getBlue() * 0.0722;
+                sumGreyPixel +=  color.getRed() * RED +
+                        color.getGreen() * GREEN + color.getBlue() * BLUE;
             }
         }
-        return sumGreyPixel / (image.getHeight() * image.getWidth()) / 255;
+        return sumGreyPixel / (image.getHeight() * image.getWidth()) / CHARSAMOUNT;
     }
 
 }

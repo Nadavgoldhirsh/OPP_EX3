@@ -6,8 +6,6 @@ import static image.ImagePadder.padImage;
 import static image.ImageSub.subImage;
 import image_char_matching.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -15,10 +13,10 @@ import java.util.Set;
  */
 public class AsciiArtAlgorithm {
     private double[][] last_brightness ;
-    private Image[][] subImages;
-    private image.Image image;
-    private int res;
-    private Set<Character> charset;
+    private  Image[][] subImages;
+    private final image.Image image;
+    private final int res;
+    private final Set<Character> charset;
 
     /**
      * class Ctor
