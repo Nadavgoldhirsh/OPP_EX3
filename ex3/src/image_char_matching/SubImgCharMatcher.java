@@ -34,7 +34,7 @@ public class SubImgCharMatcher {
      * Ctor of the class that gets a set of chars to use
      * @param charset a set of chars to use in order to create the new image
      */
-    public SubImgCharMatcher(Set<Character> charset){
+    public SubImgCharMatcher(char [] charset){
         for (char ch : charset){
             charMap.put(ch, getCharBrightness(ch));
         }
@@ -159,21 +159,20 @@ public class SubImgCharMatcher {
         }
         else {
             // the char is already inside
-            return;
+            brightness = charMap.get(c);
         }
+        double minBright = getMinBrightness(charMap);
+        double maxBright = getMaxBrightness(charMap);
         // now add to the normMap and check if we need to change all or just add new norm
-        if (getMaxBrightness(charMap)==brightness || getMinBrightness(charMap) == brightness){
+        if (maxBright==brightness || minBright == brightness){
             // means there is a new min/max value so update the whole set
             charMapNormal.put(c,brightness);
             calcNormCharSetBrightness();
         }
         else{
-            double minBright = getMinBrightness(charMap);
-            double maxBright = getMaxBrightness(charMap);
             double value = (charMap.get(c)-minBright)/(maxBright-minBright); // calc the new norm
             charMapNormal.put(c,value);
         }
-
     }
 
     /**
@@ -182,18 +181,17 @@ public class SubImgCharMatcher {
      */
     public void removeChar(char c){
         double brightness;
-        if (charMap.containsKey(c)) {
+        double minBright = getMinBrightness(charMap);
+        double maxBright = getMaxBrightness(charMap);
+        if (charMapNormal.containsKey(c)) {
             brightness = charMap.get(c);
-            if (brightness == getMinBrightness(charMap)|| brightness == getMaxBrightness(charMap)){
+            if (brightness == maxBright|| brightness == minBright){
                 charMapNormal.remove(c);
-                charMap.remove(c);
                 calcNormCharSetBrightness();
             }
             else{
-                charMap.remove(c);
                 charMapNormal.remove(c);
             }
-            }
-        // else we have nothing to remove so return
+        }// else we have nothing to remove so return
         }
 }

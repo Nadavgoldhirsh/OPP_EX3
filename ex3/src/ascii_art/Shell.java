@@ -2,6 +2,7 @@ package ascii_art;
 
 import ascii_output.AsciiOutput;
 import exceptions.InvalidUserInputException;
+import image.ImagePadder;
 import output_factory.FactoryAsciiOutput;
 import image.Image;
 import image_char_matching.SubImgCharMatcher;
@@ -42,18 +43,18 @@ public class Shell {
     private static final int RES_MULT = 2;
     private static final String OUSTIDE_RES_RANGE_MSG = "Did not change resolution due to exceeding boundaries.";
     private static final String IMAGE_CHANGE = "image";
-    private static final String IMAGE_FILE_FAIL = "Did not execute due to problem with image file";
+    private static final String IMAGE_FILE_FAIL = "Did not execute due to problem with image file.";
     private static final String DEFAULT_OUTPUT = "console";
     private static final String OUTPUT = "output";
     private static final String OUTPUT_INCORRECT_FORMAT = "Did not change output method due to incorrect format.";
 
     private static final String EMPTY_CHARSET_MSG = "Did not execute. Charset is empty.";
     private static final String DEFAULT_IMAGE_PATH_IS_INVALID = "default image path is invalid";
-    private static final String INCORRECT_COMMAND_MSG = "Did not execute due to incorrect command";
+    private static final String INCORRECT_COMMAND_MSG = "Did not execute due to incorrect command.";
     private static final String DID_NOT_CHARS_DUE_TO_INCORRECT_FORMAT = "Did not chars due to incorrect format.";
     private static final String REMOVE_INCORRECT_FORMAT = "Did not remove due to incorrect format.";
     private static final String DID_NOT_IMAGE_DUE_TO_INCORRECT_FORMAT = "Did not image due to incorrect format.";
-    private static final String DID_NOT_RES_DUE_TO_INCORRECT_FORMAT = "Did not res due to incorrect format.";
+    private static final String DID_NOT_RES_DUE_TO_INCORRECT_FORMAT = "Did not change resolution due to incorrect format.";
     private static final String INVALID_ASCII_ART_COMMAND_FORMAT = "Invalid AsciiArt command format";
 
 
@@ -78,6 +79,7 @@ public class Shell {
     private static final String ADD = "add";
     private static final String REMOVE = "remove";
     private static final String REGEX = "\\s+";
+    private static final String DOT = ".";
     private int resolution;
     private Image image;
     private String outputType;
@@ -90,7 +92,7 @@ public class Shell {
         resolution = DEFAULT_RESOLUTION;
         outputType = DEFAULT_OUTPUT;
         charSet.addAll(Set.of('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
-        image = new Image(IMAGE);
+        image = ImagePadder.padImage(new Image(IMAGE));
         factory = new FactoryAsciiOutput();
         outputType = DEFAULT_OUTPUT;
         asciiOuter = factory.createAsciiOutput(outputType);
@@ -98,12 +100,22 @@ public class Shell {
         changedTheAlgoParams = false;
     }
 
+    private char[] getCharsInArray() {
+        char[] charArray = new char[charSet.size()];
+        int index = 0;
+        for (char c : charSet) {
+            charArray[index++] = c;
+        }
+        return charArray;
+    }
+
     public void run() {
+        char[] charArray = getCharsInArray();
+        SubImgCharMatcher matcher = new SubImgCharMatcher(charArray);
         while (true) {
             System.out.print(OUTED_FOR_INPUT);
             String input = KeyboardInput.readLine();
             String[] words = input.split(REGEX);
-            SubImgCharMatcher matcher = new SubImgCharMatcher(charSet);
             try{
             if (input.equals(EXIT)) {
                 break;
@@ -217,28 +229,36 @@ public class Shell {
         }
         // the length is 2, we check for up and down
         else if (words[1].equals(UP)) {
-            int max_res = image.getWidth();
-            if (resolution* RES_MULT> max_res){
-                throw new InvalidUserInputException(OUSTIDE_RES_RANGE_MSG);
-            }
-            else{
-                resolution = resolution*2;
-                changedTheAlgoParams = true;
-                System.out.println("Resolution set to "+resolution);
-            }
+            upCase();
         } else if (words[1].equals(DOWN)) {
-            int min_res = Math.max(1, image.getWidth()/ image.getHeight());
-            if (resolution / RES_MULT < min_res){
-                throw new InvalidUserInputException(OUSTIDE_RES_RANGE_MSG);
-            }
-            else{
-                resolution = resolution/2;
-                changedTheAlgoParams = true;
-                System.out.println(RESOLUTION_SET_TO +resolution);
-            }
+            downCase();
         }
         else{
             throw new InvalidUserInputException(DID_NOT_RES_DUE_TO_INCORRECT_FORMAT);
+        }
+    }
+
+    private void downCase() throws InvalidUserInputException {
+        int min_res = Math.max(1, image.getWidth()/ image.getHeight());
+        if (resolution / RES_MULT < min_res){
+            throw new InvalidUserInputException(OUSTIDE_RES_RANGE_MSG);
+        }
+        else{
+            resolution = resolution/2;
+            changedTheAlgoParams = true;
+            System.out.println(RESOLUTION_SET_TO +resolution+DOT);
+        }
+    }
+
+    private void upCase() throws InvalidUserInputException {
+        int max_res = image.getWidth();
+        if (resolution* RES_MULT> max_res){
+            throw new InvalidUserInputException(OUSTIDE_RES_RANGE_MSG);
+        }
+        else{
+            resolution = resolution*2;
+            changedTheAlgoParams = true;
+            System.out.println(RESOLUTION_SET_TO+resolution+ DOT);
         }
     }
 

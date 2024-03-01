@@ -32,7 +32,8 @@ public class AsciiArtAlgorithm {
      * This method run the program
      */
     public char [][] run(){
-        SubImgCharMatcher matcher = new SubImgCharMatcher(charset);
+        char[] charArray = getCharsInArray();
+        SubImgCharMatcher matcher = new SubImgCharMatcher(charArray);
         char[][] art = new char[image.getHeight()/(image.getWidth()/res)][res];
         if(last_brightness != null && subImages!=null){
             createFromGiven(matcher, art);
@@ -41,6 +42,15 @@ public class AsciiArtAlgorithm {
              createFromScratch(matcher, art); // this method fill the art array
         }
         return art;
+    }
+
+    private char[] getCharsInArray() {
+        char[] charArray = new char[charset.size()];
+        int index = 0;
+        for (char c : charset) {
+            charArray[index++] = c;
+        }
+        return charArray;
     }
 
     private void createFromGiven(SubImgCharMatcher matcher, char[][] art) {
@@ -57,6 +67,9 @@ public class AsciiArtAlgorithm {
         last_brightness = new double[image.getHeight() / (image.getWidth() / res)][ res];
         for (int i = 0; i < image.getHeight() / (image.getWidth() / res); i++) {
             for (int j = 0; j < res; j++) {
+//                if (i == 83 && j == 24){
+//                    int a =0; just for testing
+//                }
                 Image image1 = subImages[i][j];
                 double brightness = greyImage(image1);
                 last_brightness[i][j] = brightness;
